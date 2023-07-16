@@ -3,31 +3,31 @@
 **Antes de mais:** `Alguns termos estarão em inglês, pois como programadores de lingua portuguesa, devemos sempre escrever os nomes das variáveis, classes... em inglês e existem termos que simplesmente não tem tradução.`
 
 - [Model](#model)
-  - [Naming](#naming)
-  - [Best practices](#best-practices)
-  - [Structure](#structure)
+  - [Nomenculatura](#naming)
+  - [Boas Práticas](#best-practices)
+  - [Estrutura](#structure)
 - [Controller](#controller)
-  - [Naming](#naming-1)
+  - [Nomenculatura](#naming-1)
   - [Types](#types)
-  - [Best practices](#best-practices-1)
+  - [Boas Práticas](#best-practices-1)
   - [Namespacing](#namespacing)
 - [Request](#request)
-  - [Naming](#naming-2)
+  - [Nomenculatura](#naming-2)
 - [Configuration](#configuration)
-  - [Best practices](#best-practices-2)
+  - [Boas Práticas](#best-practices-2)
 - [Action](#action)
-  - [Naming](#naming-3)
-  - [Best practices](#best-practices-3)
+  - [Nomenculatura](#naming-3)
+  - [Boas Práticas](#best-practices-3)
 - [Support](#support)
-  - [Naming](#naming-4)
+  - [Nomenculatura](#naming-4)
 - [Routing](#routing)
   - [Route Types](#route-types)
-  - [Best practices](#best-practices-4)
+  - [Boas Práticas](#best-practices-4)
 - [Middleware](#middleware)
-  - [Usage example](#usage-example)
+  - [Exemplo prático](#usage-example)
 - [Observer](#observer)
-  - [Naming](#naming-5)
-  - [Usage example](#usage-example-1)
+  - [Nomenculatura](#naming-5)
+  - [Boas Práticas](#usage-example-1)
 - [Event](#event)
   - [Dispatching events](#dispatching-events)
   - [Listeners](#listeners)
@@ -128,4 +128,355 @@ Admin/UserController.php
 Api/Admin/UserController.php
 Api/UserController.php
 UserController.php
+```
+
+<a name="request"></a>
+
+# Request
+
+Requests são objetos encapsulam os dados de input de um pedido HTTP.
+
+Fornecendo uma forma conveniente de validar e processar os dados inseridos antes de os utilizar na aplicação. [Ler Mais](https://laravel.com/docs/validation#form-request-validation)
+
+**Comando para Criar::** `php artisan make:request StoreUserRequest`
+
+```php
+class StoreUserRequest extends FormRequest
+{
+    /**
+     * Determine if the user is authorized to make this request.
+     */
+    public function authorize()
+    {
+        return true;
+    }
+
+    /**
+     * Get the validation rules that apply to the request.
+     */
+    public function rules()
+    {
+        return [
+          //
+        ];
+    }
+}
+```
+
+<a name="naming-2"></a>
+
+## Nomenculatura
+
+Nome do método no singular, nome do Model e o sufixo "Request" (`StoreUserRequest`, `StoreProductRequest`, `UpdateCategoryRequest`...)
+
+<a name="configuration"></a>
+
+# Configurations
+
+As configurações são sempre guardadas na diretoria `config`.
+
+> **Warning:** Nunca se deve aceder ao método `env()` diretamente na aplicação. Deve-se usar apenas nos ficheiros de configuração com o método `config()`.
+
+<a name="best-practices-2"></a>
+
+## Boas Práticas
+
+- As definições da aplicação personalizadas devem ser guardadas em `project.php`.
+- Chaves de API de serviços externos devem ser guardada em `services.php`.
+
+<a name="action"></a>
+
+# Action
+
+Ações são classes responsáveis por apenas uma tarefa. O código deve ser limpo e simples.
+
+**Comando para Criar:** `php artisan make:action VerifyUserAction`
+
+```php
+class VerifyUserAction
+{
+    /**
+     * Run the action.
+     */
+    public function run(): void
+    {
+        //
+    }
+}
+```
+
+> **Dica:** Este comando não faz parte da framework Laravel, instale a nossa package `rockero-cz/laravel-starter-kit` para obter um pouco de magia.
+
+<a name="naming-3"></a>
+
+## Nomenculatura
+
+Singular com o sufixo "Action" (`VerifyUserAction`, `CreateProductAction`, `ReorderCategoryAction`...)
+
+<a name="best-practices-3"></a>
+
+## Boas Práticas
+
+- Ações devem conter apenas um método público com o nome `run()`.
+- Métodos de ajuda de uma única ação devem ser privados ou protegidos.
+  - Vários métodos de ajuda devem ser convertidos em classes `Support` classes.
+
+<a name="support"></a>
+
+# Support
+
+Support classes are a way to group related functions and logic together in a single class. They allow for easy reuse of code and help to keep application code organized.
+
+They are typically used to provide functionality that is not specific to a single model or controller, but rather is used across multiple parts of an application.
+
+It is simpler alternative than using services.
+
+**Create command:** `php artisan make:class Support/Cart`
+
+```php
+class Cart
+{
+  //
+}
+```
+
+> **Tip:** This command is not part of Laravel framework, install our package `rockero-cz/laravel-starter-kit` to get a bit of magics.
+
+<a name="naming-4"></a>
+
+## Naming
+
+Support purpose name without "Support" suffix (`Cart`, `OpeningHours`, `Table`...)
+
+<a name="routing"></a>
+
+# Routing
+
+<a name="route-types"></a>
+
+## Route Types
+
+- **web** - Routes that handle web-based HTTP requests and responses…
+- **api** - Routes that handle API requests and responses…
+- **channels** - Routes that handle real-time broadcasting to channels using websockets…
+- **console** - Routes for custom commands that can be executed via Artisan CLI…
+
+<a name="best-practices-4"></a>
+
+## Boas Práticas
+
+- URLs should be in plural.
+- Each route should have name.
+- Routes should be grouped by entities.
+
+```php
+Route::middleware('auth')->group(function () {
+  Route::name('users.')->group(function () {
+    Route::get('/', UserIndex::class)->name('index');
+    Route::get('/{user}', UserShow::class)->name('show');
+  });
+});
+```
+
+<a name="middleware"></a>
+
+# Middleware
+
+Middleware is a way to filter and modify incoming HTTP requests in your application, allowing you to perform various tasks such as authentication, authorization, and session management.
+
+You should create middleware in cases when you need to do some specific logic for a specific group of routes. [Read more](https://laravel.com/docs/middleware)
+
+**Create command:** `php artisan make:middleware HandleLocale`
+
+```php
+class HandleLocale
+{
+  /**
+   * Handle an incoming request.
+   */
+  public function handle(Request $request, Closure $next): Response
+  {
+    return $next($request);
+  }
+}
+```
+
+<a name="usage-example"></a>
+
+## Usage example
+
+```php
+Route::prefix('/admin')->name('admin.')->middleware(HandleLocale::class)->group(function () {
+  Route::resource('users', UserController::class)->name('users');
+  Route::resource('orders', OrderController::class)->name('orders');
+});
+```
+
+<a name="observer"></a>
+
+# Observer
+
+Observers are used to listen for specific events that occurred by models, such as `created`, `updated`, or `deleted` and more...
+
+By using observers, you can keep your model classes focused on their primary responsibilities and avoid cluttering them with additional logic. [Read more](https://laravel.com/docs/eloquent#observers)
+
+> **Warning:** Eloquent mass update queries do not perform the event and the observer is not triggered. It is caused because models are not actually loaded when doing a mass update but only SQL query is.
+
+**Create command:** `php artisan make:observer UserObserver --model=User`
+
+```php
+class UserObserver
+{
+  /**
+   * Handle the User "created" event.
+   */
+  public function created(User $user): void
+  {
+    //
+  }
+}
+```
+
+<a name="naming-5"></a>
+
+## Naming
+
+Singular model name with "Observer" suffix (`UserObserver`, `ProductObserver`, `CategoryObserver`...)
+
+<a name="usage-example-1"></a>
+
+## Usage example
+
+```php
+// Recalculate invoice when the invoice item is saved.
+public function saved(InvoiceItem $invoiceItem): void
+{
+  $invoiceItem->invoice()->recalculate();
+}
+
+// Set default state when the order is created.
+public function creating(Order $order): void
+{
+  $order->state = OrderState::NEW;
+}
+
+// Delete relations before the model is deleted.
+public function deleting(Order $order): void
+{
+  $order->products()->delete();
+}
+```
+
+<a name="event"></a>
+
+# Event
+
+Events are a way to trigger and handle actions that occur during the execution of your application. They are used in combination with listeners.
+
+When an event is dispatched, Laravel will notify all registered listeners for that event, giving them a chance to perform any necessary actions. [Read more](https://laravel.com/docs/events)
+
+> We primarily use actions instead of events because they are more simple and understandable. However, we use still events for some notifications or in combination with [websockets](https://laravel.com/docs/broadcasting).
+
+**Create command:** `php artisan make:event OrderCreated`
+
+```php
+class OrderCreated
+{
+    use Dispatchable, InteractsWithSockets, SerializesModels;
+
+    /**
+     * Create a new event instance.
+     */
+    public function __construct()
+    {
+        //
+    }
+
+    /**
+     * Get the channels the event should broadcast on.
+     */
+    public function broadcastOn(): Channel|array
+    {
+        return new PrivateChannel('channel-name');
+    }
+}
+```
+
+<a name="dispatching-events"></a>
+
+## Dispatching events
+
+```php
+OrderCreated::dispatch();
+
+// or
+
+event(new OrderCreated());
+```
+
+<a name="listeners"></a>
+
+## Listeners
+
+**Create command:** `php artisan make:listener SendOrderCreatedNotification --event=OrderCreated`
+
+```php
+class SendOrderCreatedNotification
+{
+    /**
+     * Create the event listener.
+     */
+    public function __construct()
+    {
+        //
+    }
+
+    /**
+     * Handle the event.
+     */
+    public function handle(OrderCreated $event): void
+    {
+        //
+    }
+}
+```
+
+<a name="command"></a>
+
+# Command
+
+Commands are a powerful tool for automating some tasks in your application. Laravel also provides a set of built-in commands that you can use out of the box.
+
+With commands, you can easily perform repetitive actions like running tests or executing database migrations, with minimal effort. [Read more](https://laravel.com/docs/artisan#writing-commands)
+
+**Create command:** `php artisan make:command FetchUsers`
+
+```php
+class FetchUsers extends Command
+{
+    protected $signature = 'command:name';
+    protected $description = 'Command description';
+
+    /**
+     * Execute the console command.
+     */
+    public function handle(): int
+    {
+        return Command::SUCCESS;
+    }
+}
+```
+
+<a name="scheduling-commands"></a>
+
+## Scheduling commands
+
+You can easily run commands at specified intervals or times using [Scheduler](https://laravel.com/docs/scheduling).
+
+```php
+// app/Console/Kernel.php
+protected function schedule(Schedule $schedule)
+{
+    $schedule->command('telescope:prune')->daily();
+}
 ```
