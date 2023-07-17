@@ -225,13 +225,15 @@ Singular com o sufixo "Action" (`VerifyUserAction`, `CreateProductAction`, `Reor
 
 # Support
 
-Support classes are a way to group related functions and logic together in a single class. They allow for easy reuse of code and help to keep application code organized.
+Classes de Suporte são um forma de agrupar funções de lógica relacionadas numa classe. Permitem a reutilização simples do código e ajuda a organizar o código da aplicação.
+
+Tipicamente elas são usadas para disponibilizar funcionalidades que não estão relacionadas a apenas um Model ou Controller, e são utilizadas em várias partes da aplicação.
 
 They are typically used to provide functionality that is not specific to a single model or controller, but rather is used across multiple parts of an application.
 
 It is simpler alternative than using services.
 
-**Create command:** `php artisan make:class Support/Cart`
+**Comando para Criar:** `php artisan make:class Support/Cart`
 
 ```php
 class Cart
@@ -240,13 +242,13 @@ class Cart
 }
 ```
 
-> **Tip:** This command is not part of Laravel framework, install our package `rockero-cz/laravel-starter-kit` to get a bit of magics.
+> **Tip:** Este comando não faz parte da framework Laravel, instale a nossa package `rockero-cz/laravel-starter-kit` para obter um pouco de magia.
 
 <a name="naming-4"></a>
 
-## Naming
+## Nomenculatura
 
-Support purpose name without "Support" suffix (`Cart`, `OpeningHours`, `Table`...)
+Singular sem o sufixo "Support" (`Cart`, `OpeningHours`, `Table`...)
 
 <a name="routing"></a>
 
@@ -254,20 +256,20 @@ Support purpose name without "Support" suffix (`Cart`, `OpeningHours`, `Table`..
 
 <a name="route-types"></a>
 
-## Route Types
+## Route Types (Tipos de Rotas)
 
-- **web** - Routes that handle web-based HTTP requests and responses…
-- **api** - Routes that handle API requests and responses…
-- **channels** - Routes that handle real-time broadcasting to channels using websockets…
-- **console** - Routes for custom commands that can be executed via Artisan CLI…
+- **web** - Rotas que gerem pedidos e repostas HTTP via web…
+- **api** - Rotas que gerem pedidos e repostas via API…
+- **channels** - Rotas que gerem canais de transmissão em tempo real que usam websockets…
+- **console** - Rotas que gerem comandos que podem ser executados através da linha de comandos…
 
 <a name="best-practices-4"></a>
 
 ## Boas Práticas
 
-- URLs should be in plural.
-- Each route should have name.
-- Routes should be grouped by entities.
+- Os URLs devem ser escritos no plural.
+- Cada rota deve ter um nome.
+- As rotas devem ser agrupadas por entidades.
 
 ```php
 Route::middleware('auth')->group(function () {
