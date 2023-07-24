@@ -284,11 +284,10 @@ Route::middleware('auth')->group(function () {
 
 # Middleware
 
-Middleware is a way to filter and modify incoming HTTP requests in your application, allowing you to perform various tasks such as authentication, authorization, and session management.
+O Middleware é uma forma de filtrar e modificar pedidos HTTP recebidos na aplicação, que permitem realizar varias tarefas como autenticação, autorização e gestão de sessões.
+Deve-se utilizar um middleware em casos em que seja preciso lógica espicifica para um grupo de rotas. [Ler Mais](https://laravel.com/docs/middleware)
 
-You should create middleware in cases when you need to do some specific logic for a specific group of routes. [Read more](https://laravel.com/docs/middleware)
-
-**Create command:** `php artisan make:middleware HandleLocale`
+**Comando para Criar:** `php artisan make:middleware HandleLocale`
 
 ```php
 class HandleLocale
@@ -305,7 +304,7 @@ class HandleLocale
 
 <a name="usage-example"></a>
 
-## Usage example
+## Exemplo de uso
 
 ```php
 Route::prefix('/admin')->name('admin.')->middleware(HandleLocale::class)->group(function () {
@@ -318,13 +317,13 @@ Route::prefix('/admin')->name('admin.')->middleware(HandleLocale::class)->group(
 
 # Observer
 
-Observers are used to listen for specific events that occurred by models, such as `created`, `updated`, or `deleted` and more...
+Classes de observação são usadas para "ouvir" eventos especificos que ocorrem nos models tais como `created`, `updated`, ou `deleted` entre outros...
 
-By using observers, you can keep your model classes focused on their primary responsibilities and avoid cluttering them with additional logic. [Read more](https://laravel.com/docs/eloquent#observers)
+Ao utilizarmos classes de observação, podemos manter a classe do model limpa e focada no seu proposito evitando enche-la de lógica desnecessária. [Ler Mais](https://laravel.com/docs/eloquent#observers)
 
-> **Warning:** Eloquent mass update queries do not perform the event and the observer is not triggered. It is caused because models are not actually loaded when doing a mass update but only SQL query is.
+> **Avio:** Atualizações em massa do Eloquent não ativam as classes de observação. Isto acontece porque as classes model não são carregadas quando é feita uma atualização em massa, apenas uma Query SQL.
 
-**Create command:** `php artisan make:observer UserObserver --model=User`
+**Comando para Criar:** `php artisan make:observer UserObserver --model=User`
 
 ```php
 class UserObserver
@@ -341,13 +340,13 @@ class UserObserver
 
 <a name="naming-5"></a>
 
-## Naming
+## Nomenculatura
 
-Singular model name with "Observer" suffix (`UserObserver`, `ProductObserver`, `CategoryObserver`...)
+Nome do model no singular com o sufixo "Observer" (`UserObserver`, `ProductObserver`, `CategoryObserver`...)
 
 <a name="usage-example-1"></a>
 
-## Usage example
+## Exemplo de uso
 
 ```php
 // Recalculate invoice when the invoice item is saved.
@@ -373,7 +372,7 @@ public function deleting(Order $order): void
 
 # Event
 
-Events are a way to trigger and handle actions that occur during the execution of your application. They are used in combination with listeners.
+Classes de Evento são uma forma de ativar e manipular ações que ocorrem durante a execução da aplicação. São usadas em combinação com listeners.
 
 When an event is dispatched, Laravel will notify all registered listeners for that event, giving them a chance to perform any necessary actions. [Read more](https://laravel.com/docs/events)
 
